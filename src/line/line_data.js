@@ -64,8 +64,13 @@ export function buildLineContent(cm, lineView) {
   // The padding-right forces the element to have a 'border', which
   // is needed on Webkit to be able to get line-level bounding
   // rectangles for it (in measureChar).
-  let content = eltP("span", null, null, webkit ? "padding-right: .1px" : null)
-  let builder = {pre: eltP("pre", [content], "CodeMirror-line"), content: content,
+
+  let tag = 'div'
+  if (lineView.line.text.match((/^#{1}\x20/))) tag = 'h1'
+  if (lineView.line.text.match((/^#{2}\x20/))) tag = 'h2'
+  if (lineView.line.text.match((/^#{3}\x20/))) tag = 'h3'
+  let content = eltP('span', null, null, webkit ? "padding-right: .1px" : null)
+  let builder = {pre: eltP(tag, [content], "CodeMirror-line"), content: content,
                  col: 0, pos: 0, cm: cm,
                  trailingSpace: false,
                  splitSpaces: cm.getOption("lineWrapping")}
@@ -128,14 +133,20 @@ export function defaultSpecialCharPlaceholder(ch) {
 // Build up the DOM representation for a single token, and add it to
 // the line map. Takes care to render special characters separately.
 function buildToken(builder, text, style, startStyle, endStyle, css, attributes) {
+  if (text.match((/^#{1}\x20/))) text = text.replace(/#/g, '').trimStart()
+  // if (text.match((/^#{2}\x20/))) text = text.replace(/#/g, '').trimStart()
+  // if (text.match((/^#{3}\x20/))) text = text.replace(/#/g, '').trimStart()
   if (!text) return
   let displayText = builder.splitSpaces ? splitSpaces(text, builder.trailingSpace) : text
   let special = builder.cm.state.specialChars, mustWrap = false
   let content
   if (!special.test(text)) {
     builder.col += text.length
+    // if (text.match((/^#{1}\x20/))) displayText = text.replace(/#/g, '').trimStart()
     content = document.createTextNode(displayText)
     builder.map.push(builder.pos, builder.pos + text.length, content)
+
+
     if (ie && ie_version < 9) mustWrap = true
     builder.pos += text.length
   } else {

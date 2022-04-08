@@ -1,6 +1,6 @@
 {
-  "name": "codemirror",
-  "version": "5.65.2",
+  "name": "codemirror-custom",
+  "version": "1.0.1",
   "main": "lib/codemirror.js",
   "style": "lib/codemirror.css",
   "author": {
@@ -36,7 +36,7 @@
   "homepage": "https://codemirror.net",
   "repository": {
     "type": "git",
-    "url": "https://github.com/codemirror/CodeMirror.git"
+    "url": "https://github.com/Mochiduki0715/CodeMirror.git"
   },
   "jspm": {
     "directories": {},
